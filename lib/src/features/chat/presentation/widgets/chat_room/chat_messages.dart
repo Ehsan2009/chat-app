@@ -18,10 +18,24 @@ class ChatMessages extends ConsumerWidget {
           .watch(chatRoomControllerProvider.notifier)
           .getMessages(roomID),
       builder: (context, snapshot) {
+        var docs = snapshot.data!.docs;
+
         if (!snapshot.hasData) {
           return Center(
             child: Text(
-              'There is not message',
+              'There is not message here',
+              style: TextStyle(
+                fontSize: 24,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+          );
+        }
+
+        if (docs.isEmpty) {
+          return Center(
+            child: Text(
+              'There is not message here',
               style: TextStyle(
                 fontSize: 24,
                 color: Theme.of(context).colorScheme.secondary,
@@ -31,8 +45,6 @@ class ChatMessages extends ConsumerWidget {
         }
 
         if (snapshot.hasData) {
-          var docs = snapshot.data!.docs;
-
           return ListView.builder(
             padding: const EdgeInsets.only(bottom: 40),
             reverse: true,
