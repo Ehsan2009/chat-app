@@ -13,15 +13,15 @@ class ChatList extends ConsumerWidget {
     return FutureBuilder<List<String>>(
       future: ref.watch(chatServiceProvider).fetchUsers(),
       builder: (context, snapshot) {
-
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
 
         if (!snapshot.hasData) {
           Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.secondary,
+            child: Text(
+              'No users available',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
           );
         }
@@ -45,11 +45,8 @@ class ChatList extends ConsumerWidget {
         }
 
         return Center(
-          child: Text(
-            'No users available',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
+          child: CircularProgressIndicator(
+            color: Theme.of(context).colorScheme.secondary,
           ),
         );
       },

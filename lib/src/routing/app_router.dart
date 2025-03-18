@@ -23,7 +23,6 @@ GoRouter goRouter(Ref ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return GoRouter(
     initialLocation: '/auth',
-    debugLogDiagnostics: true,
     redirect: (context, state) {
       final isLoggedIn = authRepository.currentUser != null;
       final path = state.uri.path;

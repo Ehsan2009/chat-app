@@ -42,22 +42,25 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
     try {
       if (isLogin) {
-        ref.read(authControllerProvider.notifier).authenticate(
+        ref
+            .read(authControllerProvider.notifier)
+            .authenticate(
               enteredEmail.trim(),
               enteredPassword.trim(),
               EmailPasswordSignInFormType.signIn,
             );
       } else {
-        ref.read(authControllerProvider.notifier).authenticate(
+        ref
+            .read(authControllerProvider.notifier)
+            .authenticate(
               enteredEmail.trim(),
               enteredPassword.trim(),
               EmailPasswordSignInFormType.register,
             );
       }
-
-      // if (mounted) context.goNamed(AppRoute.splash.name);
     } on FirebaseAuthException catch (error) {
-      if (mounted) {
+      final authState = ref.read(authControllerProvider);
+      if (authState.hasError && mounted) {
         ScaffoldMessenger.of(context).clearSnackBars();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error.message ?? 'Authentication failed.')),
@@ -72,7 +75,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      // backgroundColor: Colors.grey[300],
       body: ResponsiveCenter(
         maxContentWidth: Breakpoint.tablet,
         child: SingleChildScrollView(
@@ -89,9 +91,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       width: 160,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
-        
+
                     const SizedBox(height: 24),
-        
+
                     Text(
                       isLogin
                           ? 'Welcome back you\'ve been missed!'
@@ -101,9 +103,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
-        
+
                     const SizedBox(height: 24),
-        
+
                     CustomTextFormField(
                       hintText: 'Email',
                       validator: (value) {
@@ -116,9 +118,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         enteredEmail = value!.trim();
                       },
                     ),
-        
+
                     const SizedBox(height: 16),
-        
+
                     CustomTextFormField(
                       hintText: 'Password',
                       controller: passwordController,
@@ -133,9 +135,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         enteredPassword = value!;
                       },
                     ),
-        
+
                     if (isLogin) const SizedBox(height: 8),
-        
+
                     if (isLogin)
                       Align(
                         alignment: Alignment.centerRight,
@@ -147,9 +149,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           ),
                         ),
                       ),
-        
+
                     if (!isLogin) const SizedBox(height: 16),
-        
+
                     // password confirm TextFormFields
                     if (!isLogin)
                       CustomTextFormField(
@@ -163,18 +165,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           return null;
                         },
                       ),
-        
+
                     const SizedBox(height: 24),
-        
+
                     // submit button
                     AuthSubmitButton(
                       submit: submit,
                       isLogin: isLogin,
                       isAuthenticating: authState.isLoading,
                     ),
-        
+
                     const SizedBox(height: 20),
-        
+
                     // switching between login and sign up modes
                     AuthModeSwitch(
                       onTap: () {

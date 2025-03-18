@@ -7,20 +7,21 @@ part of 'chat_room_controller.dart';
 // **************************************************************************
 
 String _$chatRoomControllerHash() =>
-    r'8e33bc3887e943c231cd3c1cc2bdb9282504c097';
+    r'bf005d65359e6e596a0e4dadd357ab93df3f2de0';
 
 /// See also [ChatRoomController].
 @ProviderFor(ChatRoomController)
 final chatRoomControllerProvider =
     AutoDisposeAsyncNotifierProvider<ChatRoomController, void>.internal(
-  ChatRoomController.new,
-  name: r'chatRoomControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$chatRoomControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      ChatRoomController.new,
+      name: r'chatRoomControllerProvider',
+      debugGetCreateSourceHash:
+          const bool.fromEnvironment('dart.vm.product')
+              ? null
+              : _$chatRoomControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ChatRoomController = AutoDisposeAsyncNotifier<void>;
 // ignore_for_file: type=lint

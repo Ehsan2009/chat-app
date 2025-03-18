@@ -1,5 +1,7 @@
+import 'package:chat_app/src/features/chat/application/chat_service.dart';
 import 'package:chat_app/src/features/chat/data/chat_repository.dart';
 import 'package:chat_app/src/features/chat/domain/message.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chat_room_controller.g.dart';
@@ -23,5 +25,14 @@ class ChatRoomController extends _$ChatRoomController {
     } catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
     }
+  }
+
+  String generateRoomId(String currentContactEmail) {
+    final chatService = ref.read(chatServiceProvider);
+    return chatService.generateRoomId(currentContactEmail);
+  }
+
+    Stream<QuerySnapshot> getMessages(String roomID) {
+    return ref.read(chatRepositoryProvider).getMessages(roomID);
   }
 }

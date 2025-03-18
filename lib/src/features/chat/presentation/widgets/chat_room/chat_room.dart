@@ -2,7 +2,6 @@ import 'package:chat_app/src/common_widgets/custom_drawer.dart';
 import 'package:chat_app/src/common_widgets/custom_text_form_field.dart';
 import 'package:chat_app/src/constants/breakpoints.dart';
 import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
-import 'package:chat_app/src/features/chat/application/chat_service.dart';
 import 'package:chat_app/src/features/chat/domain/message.dart';
 import 'package:chat_app/src/features/chat/presentation/widgets/chat_list/chat_list.dart';
 import 'package:chat_app/src/features/chat/presentation/widgets/chat_room/chat_room_controller.dart';
@@ -13,10 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ChatRoom extends ConsumerWidget {
-  const ChatRoom({
-    super.key,
-    required this.currentContact,
-  });
+  const ChatRoom({super.key, required this.currentContact});
 
   final String? currentContact;
 
@@ -24,12 +20,10 @@ class ChatRoom extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(chatRoomControllerProvider);
     final currentUser = ref.read(authRepositoryProvider).currentUser;
-    final chatService = ref.watch(chatServiceProvider);
 
-    String roomID = chatService.generateRoomId(
-      currentUser!.email,
-      currentContact ?? '',
-    );
+    String roomID = ref
+        .read(chatRoomControllerProvider.notifier)
+        .generateRoomId(currentContact ?? '');
     var messageController = TextEditingController();
     final width = MediaQuery.of(context).size.width;
     final isMobile = width <= Breakpoint.tablet;
@@ -43,7 +37,7 @@ class ChatRoom extends ConsumerWidget {
     if (currentContact == null) {
       return Center(
         child: Text(
-          'Choose a user to message!',
+          'Choose an user to message!',
           style: TextStyle(
             fontSize: 24,
             color: Theme.of(context).colorScheme.secondary,
@@ -54,24 +48,16 @@ class ChatRoom extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      drawer: isMobile
-          ? null
-          : const CustomDrawer(
-              currentSection: Section.home,
-            ),
-      appBar: isMobile
-          ? null
-          : AppBar(
-              backgroundColor: Theme.of(context).colorScheme.surface,
-            ),
+      drawer:
+          isMobile ? null : const CustomDrawer(currentSection: Section.home),
+      appBar:
+          isMobile
+              ? null
+              : AppBar(backgroundColor: Theme.of(context).colorScheme.surface),
       body: SafeArea(
         child: Row(
           children: [
-            if (!isMobile)
-              const Expanded(
-                flex: 1,
-                child: ChatList(),
-              ),
+            if (!isMobile) const Expanded(flex: 1, child: ChatList()),
             Expanded(
               flex: 2,
               child: Column(
@@ -102,9 +88,7 @@ class ChatRoom extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: ChatMessages(roomID: roomID),
-                  ),
+                  Expanded(child: ChatMessages(roomID: roomID)),
                   Padding(
                     padding: const EdgeInsets.all(24),
                     child: Row(
@@ -125,7 +109,7 @@ class ChatRoom extends ConsumerWidget {
                               Message(
                                 content: messageController.text,
                                 roomID: roomID,
-                                senderID: currentUser.id,
+                                senderID: currentUser!.id,
                                 timestamp: DateTime.now(),
                               ),
                             );
@@ -133,15 +117,16 @@ class ChatRoom extends ConsumerWidget {
                           elevation: 0,
                           shape: const CircleBorder(),
                           backgroundColor: Colors.green,
-                          child: state.isLoading
-                              ? CircularProgressIndicator(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                )
-                              : const Icon(
-                                  Icons.arrow_upward_outlined,
-                                  color: Colors.white,
-                                ),
+                          child:
+                              state.isLoading
+                                  ? CircularProgressIndicator(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  )
+                                  : const Icon(
+                                    Icons.arrow_upward_outlined,
+                                    color: Colors.white,
+                                  ),
                         ),
                       ],
                     ),

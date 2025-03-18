@@ -46,6 +46,10 @@ class ChatRepository {
 
     return users;
   }
+
+  Future<void> storeUserEmail(String id, String email) async {
+    await _firestore.collection('users').doc(id).set({'email': email});
+  }
 }
 
 @Riverpod(keepAlive: true)

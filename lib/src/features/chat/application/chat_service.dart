@@ -1,6 +1,5 @@
 import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
 import 'package:chat_app/src/features/chat/data/chat_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -10,14 +9,13 @@ class ChatService {
   ChatService(this._ref);
   final Ref _ref;
 
-  Stream<QuerySnapshot> getMessages(String roomID) {
-    return _ref.read(chatRepositoryProvider).getMessages(roomID);
-  }
+  String generateRoomId(String currentContactEmail) {
+    final authRepository = _ref.read(authRepositoryProvider);
+    final currentUserEmail = authRepository.currentUser!.email;
 
-  String generateRoomId(String currentUserID, String otherUserID) {
     List<String> ids = [
-      currentUserID.toLowerCase().trim(),
-      otherUserID.toLowerCase().trim()
+      currentUserEmail,
+      currentContactEmail.toLowerCase().trim(),
     ];
     ids.sort();
     return ids.join('_');
@@ -26,8 +24,9 @@ class ChatService {
   Future<List<String>> fetchUsers() async {
     try {
       final chatRepository = _ref.watch(chatRepositoryProvider);
-      String currentUserEmail = _ref.watch(authRepositoryProvider).currentUser!.email;
-      
+      String currentUserEmail =
+          _ref.watch(authRepositoryProvider).currentUser!.email;
+
       final users = await chatRepository.fetchUsersEmail(currentUserEmail);
 
       return users;

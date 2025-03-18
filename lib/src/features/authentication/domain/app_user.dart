@@ -8,19 +8,10 @@ class AppUser {
 
   AppUser({required this.id, required this.email});
 
-  // Convert Firebase user to AppUser
     factory AppUser.fromFirebaseUser(User firebaseUser) {
     return AppUser(
       id: firebaseUser.uid,
       email: firebaseUser.email ?? '',
     );
   }
-
-  // Convert to JSON for Firestore
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'id': id,
-  //     'email': email,
-  //   };
-  // }
 }

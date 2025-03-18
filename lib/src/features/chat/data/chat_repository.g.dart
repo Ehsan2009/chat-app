@@ -13,9 +13,10 @@ String _$chatRepositoryHash() => r'7ab66dee8488642a07e0951b2b4e8f23c9218c0b';
 final chatRepositoryProvider = Provider<ChatRepository>.internal(
   chatRepository,
   name: r'chatRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$chatRepositoryHash,
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$chatRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
