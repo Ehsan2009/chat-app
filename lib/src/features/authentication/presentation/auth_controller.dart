@@ -22,7 +22,7 @@ class AuthController extends _$AuthController {
 
     try {
       await authService.authenticate(email, password, formType);
-      state = const AsyncValue.data(null); // Success
+      state = const AsyncValue.data(null);
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }

@@ -19,17 +19,15 @@ class ChatRoom extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(chatRoomControllerProvider);
+    final chatRoomController = ref.read(chatRoomControllerProvider.notifier);
     final currentUser = ref.read(authRepositoryProvider).currentUser;
-
-    String roomID = ref
-        .read(chatRoomControllerProvider.notifier)
-        .generateRoomId(currentContact ?? '');
-    var messageController = TextEditingController();
     final width = MediaQuery.of(context).size.width;
     final isMobile = width <= Breakpoint.tablet;
+    var messageController = TextEditingController();
+    String roomID = chatRoomController.generateRoomId(currentContact ?? '');
 
     void sendMessage(Message message) async {
-      ref.read(chatRoomControllerProvider.notifier).sendMessage(message);
+      chatRoomController.sendMessage(message);
 
       messageController.clear();
     }

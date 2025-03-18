@@ -1,10 +1,10 @@
+import 'package:chat_app/src/common_widgets/alert_dialog.dart';
 import 'package:chat_app/src/common_widgets/responsive_center.dart';
 import 'package:chat_app/src/constants/breakpoints.dart';
 import 'package:chat_app/src/features/authentication/presentation/auth_controller.dart';
 import 'package:chat_app/src/features/authentication/presentation/widgets/auth_mode_switch.dart';
 import 'package:chat_app/src/features/authentication/presentation/widgets/auth_submit_button.dart';
 import 'package:chat_app/src/common_widgets/custom_text_form_field.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,38 +40,30 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
     formKey.currentState!.save();
 
-    try {
-      if (isLogin) {
-        ref
-            .read(authControllerProvider.notifier)
-            .authenticate(
-              enteredEmail.trim(),
-              enteredPassword.trim(),
-              EmailPasswordSignInFormType.signIn,
-            );
-      } else {
-        ref
-            .read(authControllerProvider.notifier)
-            .authenticate(
-              enteredEmail.trim(),
-              enteredPassword.trim(),
-              EmailPasswordSignInFormType.register,
-            );
-      }
-    } on FirebaseAuthException catch (error) {
-      final authState = ref.read(authControllerProvider);
-      if (authState.hasError && mounted) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error.message ?? 'Authentication failed.')),
+    ref
+        .read(authControllerProvider.notifier)
+        .authenticate(
+          enteredEmail.trim(),
+          enteredPassword.trim(),
+          isLogin
+              ? EmailPasswordSignInFormType.signIn
+              : EmailPasswordSignInFormType.register,
         );
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
+
+    ref.listen<AsyncValue>(authControllerProvider, (_, state) {
+      state.whenOrNull(
+        error: (error, stackTrace) {
+          if (mounted) {
+            showAlertDialog(context: context, content: error.toString());
+          }
+        },
+      );
+    });
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
