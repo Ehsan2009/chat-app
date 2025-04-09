@@ -1,7 +1,7 @@
 import 'package:chat_app/src/common_widgets/responsive_center.dart';
 import 'package:chat_app/src/constants/breakpoints.dart';
 import 'package:chat_app/src/features/chat/application/chat_service.dart';
-import 'package:chat_app/src/features/chat/presentation/widgets/chat_list/chat_list_item.dart';
+import 'package:chat_app/src/features/chat/presentation/chat_list/chat_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

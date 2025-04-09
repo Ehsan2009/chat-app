@@ -1,7 +1,7 @@
 import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
 import 'package:chat_app/src/features/authentication/presentation/auth_screen.dart';
 import 'package:chat_app/src/features/chat/presentation/chat_screen.dart';
-import 'package:chat_app/src/features/chat/presentation/widgets/chat_room/chat_room.dart';
+import 'package:chat_app/src/features/chat/presentation/chat_room/chat_room.dart';
 import 'package:chat_app/src/features/settings/presentation/settings_screen.dart';
 import 'package:chat_app/src/routing/go_router_refresh_stream.dart';
 import 'package:chat_app/src/routing/not_found_screen.dart';

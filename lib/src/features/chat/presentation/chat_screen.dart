@@ -1,7 +1,7 @@
 import 'package:chat_app/src/common_widgets/custom_drawer.dart';
 import 'package:chat_app/src/constants/breakpoints.dart';
-import 'package:chat_app/src/features/chat/presentation/widgets/chat_list/chat_list.dart';
-import 'package:chat_app/src/features/chat/presentation/widgets/chat_room/chat_room.dart';
+import 'package:chat_app/src/features/chat/presentation/chat_list/chat_list.dart';
+import 'package:chat_app/src/features/chat/presentation/chat_room/chat_room.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
