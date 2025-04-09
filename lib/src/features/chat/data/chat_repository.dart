@@ -17,15 +17,6 @@ class ChatRepository {
         .add(message.toJson());
   }
 
-  Stream<QuerySnapshot> getMessages(String roomId) {
-    return _firestore
-        .collection('chatRooms')
-        .doc(roomId)
-        .collection('messages')
-        .orderBy('timestamp', descending: true)
-        .snapshots();
-  }
-
   Future<List<String>> fetchUsersEmail(String currentUserEmail) async {
     List<String> users = [];
 

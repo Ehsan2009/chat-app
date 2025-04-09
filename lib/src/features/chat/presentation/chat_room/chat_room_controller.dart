@@ -1,7 +1,6 @@
-import 'package:chat_app/src/features/chat/application/chat_service.dart';
+import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
 import 'package:chat_app/src/features/chat/data/chat_repository.dart';
 import 'package:chat_app/src/features/chat/domain/message.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chat_room_controller.g.dart';
@@ -13,8 +12,7 @@ class ChatRoomController extends _$ChatRoomController {
     // nothing to do
   }
 
-  Future<void> sendMessage(
-      Message message) async {
+  Future<void> sendMessage(Message message) async {
     state = const AsyncLoading();
 
     final chatRepository = ref.read(chatRepositoryProvider);
@@ -28,11 +26,14 @@ class ChatRoomController extends _$ChatRoomController {
   }
 
   String generateRoomId(String currentContactEmail) {
-    final chatService = ref.read(chatServiceProvider);
-    return chatService.generateRoomId(currentContactEmail);
-  }
+    final authRepository = ref.read(authRepositoryProvider);
+    final currentUserEmail = authRepository.currentUser!.email;
 
-    Stream<QuerySnapshot> getMessages(String roomID) {
-    return ref.read(chatRepositoryProvider).getMessages(roomID);
+    List<String> ids = [
+      currentUserEmail,
+      currentContactEmail.toLowerCase().trim(),
+    ];
+    ids.sort();
+    return ids.join('_');
   }
 }
