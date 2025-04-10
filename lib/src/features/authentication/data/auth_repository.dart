@@ -27,7 +27,7 @@ class AuthRepository {
     return _auth.signOut();
   }
 
-  Stream<AppUser?> authStateChanges() {
+  Stream<AppUser?> watchAuthStateChanges() {
     return _auth.authStateChanges().map(_convertUser);
   }
 
@@ -40,4 +40,10 @@ class AuthRepository {
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(Ref ref) {
   return AuthRepository(FirebaseAuth.instance);
+}
+
+@riverpod  
+Stream<AppUser?> authStateChanges(Ref ref) {
+  final authRepository = ref.read(authRepositoryProvider);
+  return authRepository.watchAuthStateChanges();
 }
