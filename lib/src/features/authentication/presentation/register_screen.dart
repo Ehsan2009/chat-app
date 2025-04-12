@@ -5,24 +5,23 @@ import 'package:chat_app/src/features/authentication/presentation/auth_controlle
 import 'package:chat_app/src/features/authentication/presentation/widgets/auth_mode_switch.dart';
 import 'package:chat_app/src/features/authentication/presentation/widgets/auth_submit_button.dart';
 import 'package:chat_app/src/common_widgets/custom_text_form_field.dart';
+import 'package:chat_app/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-enum EmailPasswordSignInFormType { signIn, register }
-
-class AuthScreen extends ConsumerStatefulWidget {
-  const AuthScreen({super.key});
+class RegisterScreen extends ConsumerStatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  ConsumerState<AuthScreen> createState() => _AuthScreenState();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _AuthScreenState extends ConsumerState<AuthScreen> {
+class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final formKey = GlobalKey<FormState>();
   var enteredEmail = '';
   var enteredPassword = '';
-  var isLogin = false;
   var passwordController = TextEditingController();
 
   @override
@@ -41,13 +40,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     formKey.currentState!.save();
 
     await ref
-        .read(authControllerProvider.notifier)
+        .watch(authControllerProvider.notifier)
         .authenticate(
           enteredEmail.trim(),
           enteredPassword.trim(),
-          isLogin
-              ? EmailPasswordSignInFormType.signIn
-              : EmailPasswordSignInFormType.register,
+          EmailPasswordSignInFormType.register,
         );
   }
 
@@ -56,7 +53,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final authState = ref.watch(authControllerProvider);
 
     ref.listen<AsyncValue>(authControllerProvider, (_, state) {
-      state.whenOrNull(
+      state.when(
+        data: (_) {
+          context.goNamed(AppRoute.chat.name);
+        },
+        loading: () {},
         error: (error, stackTrace) {
           if (mounted) {
             showAlertDialog(context: context, content: error.toString());
@@ -87,9 +88,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     const SizedBox(height: 24),
 
                     Text(
-                      isLogin
-                          ? 'Welcome back you\'ve been missed!'
-                          : 'Let\'t create an account for you',
+                      'Let\'t create an account for you',
                       style: GoogleFonts.roboto(
                         fontSize: 18,
                         color: Theme.of(context).colorScheme.secondary,
@@ -128,56 +127,36 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       },
                     ),
 
-                    if (isLogin) const SizedBox(height: 8),
-
-                    if (isLogin)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          'Forgot Password?',
-                          style: GoogleFonts.roboto(
-                            fontSize: 14,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                      ),
-
-                    if (!isLogin) const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // password confirm TextFormFields
-                    if (!isLogin)
-                      CustomTextFormField(
-                        hintText: 'Confirm password',
-                        obscureText: true,
-                        validator: (value) {
-                          if (value!.isEmpty ||
-                              value != passwordController.text) {
-                            return 'Password is not correct';
-                          }
-                          return null;
-                        },
-                      ),
+                    CustomTextFormField(
+                      hintText: 'Confirm password',
+                      obscureText: true,
+                      validator: (value) {
+                        if (value!.isEmpty ||
+                            value != passwordController.text) {
+                          return 'Password is not correct';
+                        }
+                        return null;
+                      },
+                    ),
 
                     const SizedBox(height: 24),
 
                     // submit button
                     AuthSubmitButton(
                       submit: submit,
-                      isLogin: isLogin,
+                      title: 'Sign up',
                       isAuthenticating: authState.isLoading,
                     ),
 
                     const SizedBox(height: 20),
 
                     // switching between login and sign up modes
-                    AuthModeSwitch(
-                      onTap: () {
-                        setState(() {
-                          isLogin = !isLogin;
-                        });
-                      },
-                      isLogin: isLogin,
-                    ),
+                    AuthModeSwitch(onTap: () {
+                      context.goNamed(AppRoute.signIn.name);
+                    }, isLogin: false),
                   ],
                 ),
               ),

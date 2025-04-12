@@ -1,9 +1,10 @@
 import 'package:chat_app/src/features/authentication/application/auth_service.dart';
 import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
-import 'package:chat_app/src/features/authentication/presentation/auth_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_controller.g.dart';
+
+enum EmailPasswordSignInFormType { signIn, register }
 
 @riverpod
 class AuthController extends _$AuthController {

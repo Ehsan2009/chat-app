@@ -22,7 +22,7 @@ class NotFoundScreen extends ConsumerWidget {
               if (isLoggedIn) {
                 context.goNamed(AppRoute.chat.name);
               } else {
-                context.goNamed(AppRoute.auth.name);
+                context.goNamed(AppRoute.signIn.name);
               }
             },
             child: Text(isLoggedIn ? 'Go Home' : 'Login'),

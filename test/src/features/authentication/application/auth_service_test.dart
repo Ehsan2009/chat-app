@@ -1,7 +1,7 @@
 import 'package:chat_app/src/features/authentication/application/auth_service.dart';
 import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
 import 'package:chat_app/src/features/authentication/domain/app_user.dart';
-import 'package:chat_app/src/features/authentication/presentation/auth_screen.dart';
+import 'package:chat_app/src/features/authentication/presentation/auth_controller.dart';
 import 'package:chat_app/src/features/chat/data/chat_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

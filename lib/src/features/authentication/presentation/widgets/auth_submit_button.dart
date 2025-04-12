@@ -4,12 +4,12 @@ class AuthSubmitButton extends StatelessWidget {
   const AuthSubmitButton({
     super.key,
     required this.submit,
-    required this.isLogin,
+    required this.title,
     required this.isAuthenticating,
   });
 
   final void Function() submit;
-  final bool isLogin;
+  final String title;
   final bool isAuthenticating;
 
   @override
@@ -29,7 +29,7 @@ class AuthSubmitButton extends StatelessWidget {
               color: Theme.of(context).colorScheme.onPrimary,
             )
             : Text(
-                isLogin ? 'Login' : 'Sign Up',
+                title,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSecondary,
                   fontSize: 20,
