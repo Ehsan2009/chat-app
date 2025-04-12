@@ -7,9 +7,9 @@ part 'users_list_provider.g.dart';
 
 @Riverpod(keepAlive: true)
 Future<List<String>> fetchUsers(Ref ref) async {
-  final chatRepository = ref.watch(chatRepositoryProvider);
+  final chatRepository = ref.read(chatRepositoryProvider);
   String currentUserEmail =
-      ref.watch(authRepositoryProvider).currentUser!.email;
+      ref.read(authRepositoryProvider).currentUser!.email;
 
   final users = await chatRepository.fetchUsersEmail(currentUserEmail);
 

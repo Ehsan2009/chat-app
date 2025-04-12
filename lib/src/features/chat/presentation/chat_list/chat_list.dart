@@ -38,7 +38,13 @@ class ChatList extends ConsumerWidget {
           ),
         );
       },
-      error: (error, _) => Center(child: Text(error.toString())),
+      error:
+          (error, _) => Center(
+            child: Text(
+              error.toString(),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+          ),
       loading: () => Center(child: CircularProgressIndicator()),
     );
   }

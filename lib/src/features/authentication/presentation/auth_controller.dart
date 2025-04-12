@@ -1,4 +1,5 @@
 import 'package:chat_app/src/features/authentication/application/auth_service.dart';
+import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
 import 'package:chat_app/src/features/authentication/presentation/auth_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -18,13 +19,18 @@ class AuthController extends _$AuthController {
   ) async {
     final authService = ref.read(authServiceProvider);
 
-    state = const AsyncValue.loading();
+    state = AsyncLoading();
 
-    try {
-      await authService.authenticate(email, password, formType);
-      state = const AsyncValue.data(null);
-    } catch (e, stackTrace) {
-      state = AsyncValue.error(e, stackTrace);
-    }
+    state = await AsyncValue.guard(() async {
+      return authService.authenticate(email, password, formType);
+    });
+  }
+
+  Future<void> signOut() async {
+    final authRepository = ref.read(authRepositoryProvider);
+
+    state = AsyncLoading();
+
+    state = await AsyncValue.guard(authRepository.signOut);
   }
 }

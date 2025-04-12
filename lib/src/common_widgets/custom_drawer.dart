@@ -1,13 +1,10 @@
-import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
+import 'package:chat_app/src/features/authentication/presentation/auth_controller.dart';
 import 'package:chat_app/src/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-enum Section {
-  home,
-  settings,
-}
+enum Section { home, settings }
 
 class CustomDrawer extends ConsumerWidget {
   const CustomDrawer({super.key, required this.currentSection});
@@ -16,8 +13,6 @@ class CustomDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authRepository = ref.watch(authRepositoryProvider);
-
     return Drawer(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -41,16 +36,18 @@ class CustomDrawer extends ConsumerWidget {
               title: Text(
                 'H O M E',
                 style: TextStyle(
-                  color: currentSection == Section.home
-                      ? Theme.of(context).colorScheme.secondary
-                      : Colors.grey[600],
+                  color:
+                      currentSection == Section.home
+                          ? Theme.of(context).colorScheme.secondary
+                          : Colors.grey[600],
                 ),
               ),
               leading: Icon(
                 Icons.home,
-                color: currentSection == Section.home
-                    ? Theme.of(context).colorScheme.secondary
-                    : Colors.grey[600],
+                color:
+                    currentSection == Section.home
+                        ? Theme.of(context).colorScheme.secondary
+                        : Colors.grey[600],
               ),
             ),
             ListTile(
@@ -60,28 +57,27 @@ class CustomDrawer extends ConsumerWidget {
               title: Text(
                 'S E T T I N G S',
                 style: TextStyle(
-                  color: currentSection == Section.settings
-                      ? Theme.of(context).colorScheme.secondary
-                      : Colors.grey[600],
+                  color:
+                      currentSection == Section.settings
+                          ? Theme.of(context).colorScheme.secondary
+                          : Colors.grey[600],
                 ),
               ),
               leading: Icon(
                 Icons.settings,
-                color: currentSection == Section.settings
-                    ? Theme.of(context).colorScheme.secondary
-                    : Colors.grey[600],
+                color:
+                    currentSection == Section.settings
+                        ? Theme.of(context).colorScheme.secondary
+                        : Colors.grey[600],
               ),
             ),
             const Spacer(),
             ListTile(
-              onTap: () {
-                authRepository.signOut();
+              onTap: () async {
+                ref.watch(authControllerProvider.notifier).signOut();
               },
               title: const Text('L O G O U T'),
-              leading: Icon(
-                Icons.logout,
-                color: Colors.grey[600],
-              ),
+              leading: Icon(Icons.logout, color: Colors.grey[600]),
             ),
           ],
         ),
