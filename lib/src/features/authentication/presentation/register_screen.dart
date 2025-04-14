@@ -40,7 +40,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     formKey.currentState!.save();
 
     await ref
-        .watch(authControllerProvider.notifier)
+        .read(authControllerProvider.notifier)
         .authenticate(
           enteredEmail.trim(),
           enteredPassword.trim(),
@@ -146,6 +146,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                     // submit button
                     AuthSubmitButton(
+                      key: ValueKey('submit'),
                       submit: submit,
                       title: 'Sign up',
                       isAuthenticating: authState.isLoading,
