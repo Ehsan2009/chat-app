@@ -38,7 +38,7 @@ void main() {
 
   group('register screen test', () {
     testWidgets(
-      'when filling inputs and tapping sign up button, authController.authenticate() should be called',
+      'when filling inputs and tapping sign up button, authRepository.createUserWithEmailAndPassword() should be called',
       (tester) async {
         when(
           () => mockAuthRepository.createUserWithEmailAndPassword(
