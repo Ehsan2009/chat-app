@@ -146,7 +146,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                     // submit button
                     AuthSubmitButton(
-                      key: ValueKey('submit'),
                       submit: submit,
                       title: 'Sign up',
                       isAuthenticating: authState.isLoading,

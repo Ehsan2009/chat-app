@@ -1,6 +1,5 @@
 import 'package:chat_app/src/features/authentication/application/auth_service.dart';
 import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_controller.g.dart';

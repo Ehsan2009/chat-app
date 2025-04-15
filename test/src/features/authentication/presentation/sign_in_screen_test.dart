@@ -31,7 +31,7 @@ void main() {
     mockAuthRepository = MockAuthRepository();
   });
 
-  group('register screen test', () {
+  group('sign in screen test', () {
     testWidgets(
       'when filling inputs and tapping Login button, authRepository.signInWithEmailAndPassword() should be called',
       (tester) async {

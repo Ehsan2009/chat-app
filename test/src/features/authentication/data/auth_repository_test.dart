@@ -106,7 +106,5 @@ void main() {
 
       expect(user, isNull);
     });
-
-
   });
 }

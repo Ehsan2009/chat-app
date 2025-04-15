@@ -21,7 +21,7 @@ class ChatRepository {
     List<String> users = [];
 
     QuerySnapshot usersSnapshot =
-        await FirebaseFirestore.instance.collection('users').get();
+        await _firestore.collection('users').get();
 
     List<DocumentSnapshot> usersDocs = usersSnapshot.docs;
 
@@ -68,3 +68,4 @@ Stream<List<Message>> messagesListStream(Ref ref, String roomId) {
   final chatRepository = ref.read(chatRepositoryProvider);
   return chatRepository.watchMessages(roomId);
 }
+
