@@ -49,6 +49,7 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                     const Spacer(),
                     Switch(
+                      key: ValueKey('switch button'),
                       focusColor: Theme.of(context).colorScheme.onSecondary,
                       activeTrackColor:
                           Theme.of(context).colorScheme.primaryContainer,

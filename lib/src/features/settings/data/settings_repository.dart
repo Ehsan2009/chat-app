@@ -6,10 +6,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'settings_repository.g.dart';
 
 class SettingsRepository {
+  final HiveInterface hive;
+
+  SettingsRepository(this.hive);
+
+
   static const String _boxName = 'settings';
 
   Future<Box> _openBox() async {
-    return await Hive.openBox(_boxName);
+    return await hive.openBox(_boxName);
   }
 
   Future<ThemeMode> themeMode() async {
@@ -26,5 +31,5 @@ class SettingsRepository {
 
 @riverpod
 SettingsRepository settingsRepository(Ref ref) {
-  return SettingsRepository();
+  return SettingsRepository(Hive);
 }
