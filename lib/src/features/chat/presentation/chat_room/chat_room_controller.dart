@@ -13,16 +13,13 @@ class ChatRoomController extends _$ChatRoomController {
   }
 
   Future<void> sendMessage(Message message) async {
-    state = const AsyncLoading();
-
     final chatRepository = ref.read(chatRepositoryProvider);
 
-    try {
-      await chatRepository.sendMessage(message);
-      state = const AsyncData(null);
-    } catch (e, stackTrace) {
-      state = AsyncError(e, stackTrace);
-    }
+    state = const AsyncLoading();
+
+    state = await AsyncValue.guard(() async {
+      chatRepository.sendMessage(message);
+    });
   }
 
   String generateRoomId(String currentContactEmail) {

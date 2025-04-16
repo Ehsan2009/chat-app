@@ -16,11 +16,12 @@ class AuthService {
     EmailPasswordSignInFormType formType,
   ) async {
     final authRepository = _ref.read(authRepositoryProvider);
-    final chatRepository = _ref.read(chatRepositoryProvider);
 
     if (formType == EmailPasswordSignInFormType.signIn) {
       await authRepository.signInWithEmailAndPassword(email, password);
     } else {
+      final chatRepository = _ref.read(chatRepositoryProvider);
+      
       await authRepository.createUserWithEmailAndPassword(email, password);
       final currentUser = authRepository.currentUser;
       await chatRepository.storeUserEmail(currentUser!.id, email);

@@ -7,7 +7,7 @@ part of 'chat_room_controller.dart';
 // **************************************************************************
 
 String _$chatRoomControllerHash() =>
-    r'88cf4b1511cbc0a6d720628eca03a6ee031182c8';
+    r'576d5d2749d53187b58f229f6a6060a79fb03d91';
 
 /// See also [ChatRoomController].
 @ProviderFor(ChatRoomController)
