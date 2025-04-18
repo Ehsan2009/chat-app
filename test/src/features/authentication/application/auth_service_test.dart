@@ -29,7 +29,7 @@ void main() {
     ).thenReturn(mockChatRepository);
   });
 
-  group('Auth Service', () {
+  group('AuthService', () {
     final email = 'test@example.com';
     final id = '123';
     final password = '123456';
@@ -37,7 +37,11 @@ void main() {
     final registerFormType = EmailPasswordSignInFormType.register;
 
     test(
-      ('authenticate with signIn calls signInWithEmailAndPassword'),
+      ('''
+given mockAuthRepository with EmailPasswordSignInFormType.signIn
+when calling authenticate() on AuthService
+then signInWithEmailAndPassword() on AuthRepository should be called
+'''),
       () async {
         when(
           () => mockAuthRepository.signInWithEmailAndPassword(email, password),
@@ -56,7 +60,11 @@ void main() {
     );
 
     test(
-      ('authenticate with register calls createUser and storeUserEmail'),
+      ('''
+given mockAuthRepository with EmailPasswordSignInFormType.register
+when calling authenticate() on AuthService
+then createUserWithEmailAndPassword(), currentUser getter and storeUserEmail() should be called
+'''),
       () async {
         when(
           () => mockAuthRepository.createUserWithEmailAndPassword(
@@ -81,7 +89,11 @@ void main() {
             password,
           ),
         ).called(1);
+        verify(() => mockAuthRepository.currentUser).called(1);
         verify(() => mockChatRepository.storeUserEmail(id, email)).called(1);
+        verifyNever(
+          () => mockAuthRepository.signInWithEmailAndPassword(any(), any()),
+        );
       },
     );
   });

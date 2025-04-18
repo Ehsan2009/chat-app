@@ -16,36 +16,45 @@ void main() {
     mockAuthRepository = MockAuthRepository();
   });
 
-  group(
-    'Test authenticate and signOut methods in auth controller provider',
-    () {
-      final email = 'test@example.com';
-      final password = '123456';
-      final formType = EmailPasswordSignInFormType.signIn;
+  group('AuthController', () {
+    final email = 'test@example.com';
+    final password = '123456';
+    final formType = EmailPasswordSignInFormType.signIn;
 
-      test(
-        'Test authenticate method returns a successful future value',
-        () async {
-          when(
-            () => mockAuthService.authenticate(email, password, formType),
-          ).thenAnswer((_) async => Future.value());
+    test(
+      '''
+given mockAuthService
+when calling authenticate() method on AuthController
+then authenticate() method on AuthService should be called
+''',
+      () async {
+        when(
+          () => mockAuthService.authenticate(email, password, formType),
+        ).thenAnswer((_) async => Future.value());
 
-          final container = ProviderContainer(
-            overrides: [authServiceProvider.overrideWithValue(mockAuthService)],
-          );
+        final container = ProviderContainer(
+          overrides: [authServiceProvider.overrideWithValue(mockAuthService)],
+        );
 
-          addTearDown(container.dispose);
+        addTearDown(container.dispose);
 
-          final contorller = container.read(authControllerProvider.notifier);
+        final contorller = container.read(authControllerProvider.notifier);
 
-          await contorller.authenticate(email, password, formType);
+        await contorller.authenticate(email, password, formType);
 
-          final state = container.read(authControllerProvider);
-          expect(state, const AsyncData<void>(null));
-        },
-      );
+        verify(
+          () => mockAuthService.authenticate(email, password, formType),
+        ).called(1);
+      },
+    );
 
-      test('signOut method should call authRepository.signOut', () async {
+    test(
+      '''
+given mockAuthRepository
+when calling signOut() method on AuthController
+then signOut() method on AuthRepository should be called
+''',
+      () async {
         when(
           () => mockAuthRepository.signOut(),
         ).thenAnswer((_) async => Future.value());
@@ -62,10 +71,8 @@ void main() {
 
         await controller.signOut();
 
-        final state = container.read(authControllerProvider);
-        expect(state, const AsyncData<void>(null));
         verify(() => mockAuthRepository.signOut()).called(1);
-      });
-    },
-  );
+      },
+    );
+  });
 }

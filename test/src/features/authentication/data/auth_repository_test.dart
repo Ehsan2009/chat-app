@@ -14,56 +14,81 @@ void main() {
     authRepository = AuthRepository(mockFirebaseAuth);
   });
 
-  group('Auth Repository', () {
+  group('AuthRepository', () {
     const email = 'test@example.com';
     const password = 'password123';
 
-    test('signInWithEmailAndPassword calls FirebaseAuth method', () async {
-      when(
-        () => mockFirebaseAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        ),
-      ).thenAnswer((_) async => MockUserCredential());
+    test(
+      '''
+given mockFirebaseAuth
+when calling signInWithEmailAndPassword() on AuthRepository
+then signInWithEmailAndPassword() on FirebaseAuth should be called
+''',
+      () async {
+        when(
+          () => mockFirebaseAuth.signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          ),
+        ).thenAnswer((_) async => MockUserCredential());
 
-      await authRepository.signInWithEmailAndPassword(email, password);
+        await authRepository.signInWithEmailAndPassword(email, password);
 
-      verify(
-        () => mockFirebaseAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        ),
-      ).called(1);
-    });
-
-    test('createUserWithEmailAndPassword calls FirebaseAuth method', () async {
-      when(
-        () => mockFirebaseAuth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        ),
-      ).thenAnswer((_) async => MockUserCredential());
-
-      await authRepository.createUserWithEmailAndPassword(email, password);
-
-      verify(
-        () => mockFirebaseAuth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        ),
-      ).called(1);
-    });
-
-    test('Test signOut calles FirebaseAuth signOut', () async {
-      when(() => mockFirebaseAuth.signOut()).thenAnswer((_) async => {});
-
-      await authRepository.signOut();
-
-      verify(() => mockFirebaseAuth.signOut()).called(1);
-    });
+        verify(
+          () => mockFirebaseAuth.signInWithEmailAndPassword(
+            email: email,
+            password: password,
+          ),
+        ).called(1);
+      },
+    );
 
     test(
-      'watchAuthStateChanges emits an AppUser when user is authenticated',
+      '''
+given mockFirebaseAuth
+when calling createUserWithEmailAndPassword() on AuthRepository
+then createUserWithEmailAndPassword() on FirebaseAuth should be called
+''',
+      () async {
+        when(
+          () => mockFirebaseAuth.createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          ),
+        ).thenAnswer((_) async => MockUserCredential());
+
+        await authRepository.createUserWithEmailAndPassword(email, password);
+
+        verify(
+          () => mockFirebaseAuth.createUserWithEmailAndPassword(
+            email: email,
+            password: password,
+          ),
+        ).called(1);
+      },
+    );
+
+    test(
+      '''
+given mockFirebaseAuth
+when calling signOut() on AuthRepository
+then signOut() on FirebaseAuth should be called
+''',
+      () async {
+        when(() => mockFirebaseAuth.signOut()).thenAnswer((_) async => {});
+
+        await authRepository.signOut();
+
+        verify(() => mockFirebaseAuth.signOut()).called(1);
+      },
+    );
+
+    test(
+      '''
+given mockUser and mockFirebaseAuth
+when calling watchAuthStateChanges() on AuthRepository
+then watchAuthStateChanges() should return an AppUser if the user is authenticated
+''',
       () {
         final mockUser = MockUser();
         when(() => mockUser.uid).thenReturn('123');
@@ -86,7 +111,7 @@ void main() {
       },
     );
 
-    test('currentUser getter, returns an AppUser if the user is signed in', () {
+    test('currentUser getter returns an AppUser if the user is signed in', () {
       final mockUser = MockUser();
       when(() => mockUser.uid).thenReturn('123');
       when(() => mockUser.email).thenReturn('test@example.com');
@@ -99,7 +124,7 @@ void main() {
       expect(user?.email, 'test@example.com');
     });
 
-    test('currentUser returns null if no user is signed in', () {
+    test('currentUser getter returns null if the user is not signed in', () {
       when(() => mockFirebaseAuth.currentUser).thenReturn(null);
 
       final user = authRepository.currentUser;

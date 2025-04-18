@@ -10,7 +10,7 @@ import 'package:mocktail/mocktail.dart';
 
 import '../../../mocks.dart';
 
-final router = GoRouter(
+final testRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(path: '/', builder: (_, __) => SignInScreen()),
@@ -31,9 +31,13 @@ void main() {
     mockAuthRepository = MockAuthRepository();
   });
 
-  group('sign in screen test', () {
+  group('SignInScreen', () {
     testWidgets(
-      'when filling inputs and tapping Login button, authRepository.signInWithEmailAndPassword() should be called',
+      '''
+given mockAuthRepository
+when filling inputs and tapping Login button
+then authRepository.signInWithEmailAndPassword() should be called
+''',
       (tester) async {
         when(
           () => mockAuthRepository.signInWithEmailAndPassword(
@@ -47,7 +51,7 @@ void main() {
             overrides: [
               authRepositoryProvider.overrideWithValue(mockAuthRepository),
             ],
-            child: MaterialApp.router(routerConfig: router),
+            child: MaterialApp.router(routerConfig: testRouter),
           ),
         );
         await tester.pumpAndSettle();

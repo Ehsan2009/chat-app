@@ -38,7 +38,11 @@ void main() {
 
   group('RegisterScreen', () {
     testWidgets(
-      'when filling inputs and tapping sign up button, authRepository.createUserWithEmailAndPassword() should be called',
+      '''
+given mockAuthRepository
+when filling inputs and tapping sign up button
+then authRepository.createUserWithEmailAndPassword() should be called
+''',
       (tester) async {
         when(
           () => mockAuthRepository.createUserWithEmailAndPassword(
