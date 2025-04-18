@@ -24,7 +24,7 @@ void main() {
   });
 
   group('ChatRepository', () {
-    test('sending message test', () async {
+    test('should send a message and store it in Firebase', () async {
       await chatRepository.sendMessage(message);
 
       final List<Map<String, dynamic>> actualDataList =
@@ -41,7 +41,7 @@ void main() {
       expect(actualDataList.first['content'], 'Hello');
     });
 
-    test('fetch users email', () async {
+    test('should fetch users email except current user', () async {
       await fakeFirebaseFirestore.collection('users').doc(testId).set({
         'email': testEmail,
       });
@@ -57,7 +57,7 @@ void main() {
       expect(usersEmail, contains(testEmail));
     });
 
-    test('test store user email', () async {
+    test('should store user email in Firebase', () async {
       await chatRepository.storeUserEmail(testId, testEmail);
 
       final userEmail =
@@ -68,17 +68,20 @@ void main() {
       expect(userEmail.first['email'], testEmail);
     });
 
-    test('test watch messages stream', () async {
-      await fakeFirebaseFirestore
-          .collection('chatRooms')
-          .doc(message.roomID)
-          .collection('messages')
-          .add(message.toJson());
+    test(
+      'should fetch a stream of chat messages for a specific chat room',
+      () async {
+        await fakeFirebaseFirestore
+            .collection('chatRooms')
+            .doc(message.roomID)
+            .collection('messages')
+            .add(message.toJson());
 
-      final watchMessagesStream = chatRepository.watchMessages(testRoomId);
+        final watchMessagesStream = chatRepository.watchMessages(testRoomId);
 
-      final messages = await watchMessagesStream.first;
-      expect(messages.first.content, message.content);
-    });
+        final messages = await watchMessagesStream.first;
+        expect(messages.first.content, message.content);
+      },
+    );
   });
 }

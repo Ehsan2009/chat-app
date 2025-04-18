@@ -45,7 +45,7 @@ then it returns a theme mode
     test(
       '''
 given mockSettingsRepository
-when calling themeModeController.toggleTheme()
+when calling toggleTheme() on themeModeController
 then toggleThemeMode in mockSettingsRepository should be called
 ''',
       () async {

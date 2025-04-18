@@ -13,7 +13,7 @@ void main() {
   const testEmail = 'test@example.com';
   const otherUserEmail = 'other@user.com';
 
-  test('fetchUsers method returns filtered list of users', () async {
+  test('fetchUsers method should return all users email except current user', () async {
     final mockAuthRepository = MockAuthRepository();
     final mockChatRepository = MockChatRepository();
 

@@ -25,7 +25,7 @@ void main() {
   group('SettingsRepository', () {
     test(
       '''
-given isDarkMode as true 
+given isDarkMode is true 
 when calling settingsRepository.themeMode()
 then it returns themeMode.dart
 ''',
@@ -43,7 +43,7 @@ then it returns themeMode.dart
 
     test(
       '''
-given isDarkMode as false 
+given isDarkMode is false 
 when calling settingsRepository.themeMode()
 then it returns themeMode.light
 ''',
@@ -61,7 +61,7 @@ then it returns themeMode.light
 
     test(
       '''
-given isDarkMode as true 
+given isDarkMode is true 
 when calling settingsRepository.toggleThemeMode()
 then it returns themeMode.light
 ''',

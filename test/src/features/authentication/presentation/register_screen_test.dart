@@ -36,7 +36,7 @@ void main() {
     mockChatRepository = MockChatRepository();
   });
 
-  group('register screen test', () {
+  group('RegisterScreen', () {
     testWidgets(
       'when filling inputs and tapping sign up button, authRepository.createUserWithEmailAndPassword() should be called',
       (tester) async {

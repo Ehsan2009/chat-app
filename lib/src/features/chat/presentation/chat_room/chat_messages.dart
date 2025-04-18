@@ -18,7 +18,7 @@ class ChatMessages extends ConsumerWidget {
         if (messages.isEmpty) {
           return Center(
             child: Text(
-              'There is not message here',
+              'There is no message here',
               style: TextStyle(
                 fontSize: 24,
                 color: Theme.of(context).colorScheme.secondary,

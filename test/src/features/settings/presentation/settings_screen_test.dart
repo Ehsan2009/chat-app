@@ -16,7 +16,11 @@ void main() {
 
   group('SettingsScreen', () {
     testWidgets(
-      'tapping switch button calls toggleTheme() on settings repository',
+      '''
+given the theme is dart
+when user taps the theme switch
+then toggleThemeMode() on the SettingsRepository is called
+''',
       (tester) async {
         when(
           () => mockSettingsRepository.themeMode(),
