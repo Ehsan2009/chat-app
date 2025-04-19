@@ -70,6 +70,10 @@ then authRepository.createUserWithEmailAndPassword() should be called
         );
         await tester.pumpAndSettle();
 
+        await tester.tap(find.byType(AuthSubmitButton));
+        await tester.pumpAndSettle();
+        verifyNever(() => mockAuthRepository.createUserWithEmailAndPassword(any(), any()));
+
         final emailField = find.byType(CustomTextFormField).first;
         final passwordField = find.byType(CustomTextFormField).at(1);
         final confirmPasswordField = find.byType(CustomTextFormField).last;

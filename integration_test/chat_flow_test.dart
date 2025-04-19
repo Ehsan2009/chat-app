@@ -1,10 +1,16 @@
+// import 'dart:io';
+
 // import 'package:chat_app/src/app.dart';
 // import 'package:chat_app/src/common_widgets/custom_text_form_field.dart';
+// import 'package:chat_app/src/features/authentication/data/auth_repository.dart';
 // import 'package:chat_app/src/features/authentication/domain/app_user.dart';
 // import 'package:chat_app/src/features/authentication/presentation/widgets/auth_submit_button.dart';
+// import 'package:chat_app/src/features/chat/data/chat_repository.dart';
+// import 'package:chat_app/src/features/settings/data/settings_repository.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_test/flutter_test.dart';
+// import 'package:hive/hive.dart';
 // import 'package:mocktail/mocktail.dart';
 
 // import '../test/src/mocks.dart';
@@ -19,28 +25,49 @@
 
 //   late MockAuthRepository mockAuthRepository;
 //   late MockChatRepository mockChatRepository;
+//   late MockSettingsRepository mockSettingsRepository;
 
-//   setUpAll(() {
+//   setUpAll(() async {
+//     final testDir = await Directory.systemTemp.createTemp();
+//     Hive.init(testDir.path);
+//     await Hive.openBox('settings');
+
 //     mockAuthRepository = MockAuthRepository();
 //     mockChatRepository = MockChatRepository();
+//     mockSettingsRepository = MockSettingsRepository();
+//   });
+
+//   tearDownAll(() async {
+//     await Hive.close();
 //   });
 
 //   testWidgets('Integration test - Full chat flow', (tester) async {
+//     // Step 1: App starts with no user logged in
+//     when(() => mockAuthRepository.currentUser).thenReturn(null);
 //     when(
-//       () => mockAuthRepository.createUserWithEmailAndPassword(any(), any()),
-//     ).thenAnswer((_) => Future.value());
-//     when(() => mockAuthRepository.currentUser).thenReturn(firstUser);
-//     when(
-//       () => mockChatRepository.storeUserEmail(any(), any()),
-//     ).thenAnswer((_) async => Future.value());
-//     when(
-//       () => mockChatRepository.fetchUsersEmail(firstUser.email),
-//     ).thenAnswer((_) async => [secondUser.email]);
-//     // when(() => mockChatRepository.sendMessage(any())).thenAnswer((_) => Future.value());
-//     // when(() => mockChatRepository.watchMessages(any())).thenAnswer((_) => ['Hello']);
+//       () => mockAuthRepository.watchAuthStateChanges(),
+//     ).thenAnswer((_) => Stream.value(null));
 
-//     await tester.pumpWidget(ProviderScope(child: MyApp()));
+//     when(
+//       () => mockSettingsRepository.themeMode(),
+//     ).thenAnswer((_) async => ThemeMode.dark);
+
+//     await tester.pumpWidget(
+//       ProviderScope(
+//         overrides: [
+//           authRepositoryProvider.overrideWithValue(mockAuthRepository),
+//           chatRepositoryProvider.overrideWithValue(mockChatRepository),
+//           settingsRepositoryProvider.overrideWithValue(mockSettingsRepository),
+//         ],
+//         child: MyApp(),
+//       ),
+//     );
 //     await tester.pumpAndSettle();
+
+//     await tester.tap(find.text('Register now'));
+//     await tester.pumpAndSettle();
+
+//     expect(find.byType(CustomTextFormField), findsNWidgets(3));
 
 //     final emailField = find.byType(CustomTextFormField).first;
 //     final passwordField = find.byType(CustomTextFormField).at(1);
@@ -50,8 +77,23 @@
 //     await tester.enterText(emailField, testEmail);
 //     await tester.enterText(passwordField, testPassword);
 //     await tester.enterText(confirmPasswordField, testPassword);
+//     await tester.pumpAndSettle(const Duration(seconds: 5));
 //     await tester.tap(find.byType(AuthSubmitButton));
-//     await tester.pumpAndSettle();
+
+//     // Now simulate that user is logged in
+//     when(() => mockAuthRepository.currentUser).thenReturn(firstUser);
+//     when(
+//       () => mockAuthRepository.watchAuthStateChanges(),
+//     ).thenAnswer((_) => Stream.value(firstUser));
+//     when(
+//       () => mockChatRepository.storeUserEmail(any(), any()),
+//     ).thenAnswer((_) async => Future.value());
+
+//     when(
+//       () => mockChatRepository.fetchUsersEmail(secondUser.email),
+//     ).thenAnswer((_) async => []);
+
+//     await tester.pumpAndSettle(const Duration(seconds: 5));
 
 //     expect(find.text('U S E R S'), findsOneWidget);
 
@@ -59,6 +101,13 @@
 //     await tester.tap(find.byIcon(Icons.menu));
 //     await tester.pumpAndSettle();
 //     await tester.tap(find.text('L O G O U T'));
+
+//     // Simulate no user again
+//     when(() => mockAuthRepository.currentUser).thenReturn(null);
+//     when(
+//       () => mockAuthRepository.watchAuthStateChanges(),
+//     ).thenAnswer((_) => Stream.value(null));
+
 //     await tester.pumpAndSettle();
 
 //     expect(find.text('Sign up'), findsOneWidget);
@@ -68,22 +117,36 @@
 //     await tester.enterText(passwordField, secondTestPassword);
 //     await tester.enterText(confirmPasswordField, secondTestPassword);
 //     await tester.tap(find.byType(AuthSubmitButton));
+
+//     // Simulate that second user is now logged in
+//     when(() => mockAuthRepository.currentUser).thenReturn(secondUser);
+//     when(
+//       () => mockAuthRepository.watchAuthStateChanges(),
+//     ).thenAnswer((_) => Stream.value(secondUser));
+
+//     when(
+//       () => mockChatRepository.fetchUsersEmail(secondUser.email),
+//     ).thenAnswer((_) async => [testEmail]);
+
 //     await tester.pumpAndSettle();
 
 //     expect(find.text(testEmail), findsOneWidget);
 
+//     await tester.pumpAndSettle();
+
 //     // starting chat
-//     await tester.tap(find.text(testEmail));
-//     await tester.pumpAndSettle();
+//     // await tester.tap(find.text(testEmail));
+//     // await tester.pumpAndSettle();
 
-//     expect(find.text('There is not message here'), findsOneWidget);
+//     // expect(find.text('There is not message here'), findsOneWidget);
 
-//     final messageField = find.byType(CustomTextFormField);
+//     // final messageField = find.byType(CustomTextFormField);
 
-//     await tester.enterText(messageField, 'Hello');
-//     await tester.tap(find.byType(FloatingActionButton));
-//     await tester.pumpAndSettle();
+//     // await tester.enterText(messageField, 'Hello');
+//     // await tester.tap(find.byType(FloatingActionButton));
+//     // await tester.pumpAndSettle();
 
-//     expect(find.text('Hello'), findsOneWidget);
+//     // expect(find.text('Hello'), findsOneWidget);
 //   });
 // }
+

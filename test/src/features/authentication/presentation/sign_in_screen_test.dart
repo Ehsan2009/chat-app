@@ -56,6 +56,10 @@ then authRepository.signInWithEmailAndPassword() should be called
         );
         await tester.pumpAndSettle();
 
+        await tester.tap(find.byType(AuthSubmitButton));
+        await tester.pumpAndSettle();
+        verifyNever(() => mockAuthRepository.signInWithEmailAndPassword(any(), any()));
+
         final emailField = find.byType(CustomTextFormField).first;
         final passwordField = find.byType(CustomTextFormField).at(1);
 

@@ -16,15 +16,14 @@
 // void main() {
 //   const currentContact = 'napem98@gmail.com';
 //   final currentUser = AppUser(id: '123', email: 'ehsanjavdan77@gmail.com');
+//   final testRoomID = 'napem98@gmail.com-ehsanjavdan77@gmail.com';
 
 //   final message = Message(
 //     content: 'Hello',
 //     senderID: currentUser.id,
-//     roomID: 'napem98@gmail.com-ehsanjavdan77@gmail.com',
+//     roomID: testRoomID,
 //     timestamp: DateTime.now(),
 //   );
-
-//   final controller = StreamController<List<Message>>.broadcast();
 
 //   late MockAuthRepository mockAuthRepository;
 //   late MockChatRepository mockChatRepository;
@@ -40,11 +39,8 @@
 //       () => mockChatRepository.sendMessage(message),
 //     ).thenAnswer((_) async {});
 //     when(
-//       () => mockChatRepository.watchMessages(any()),
-//     ).thenAnswer((_) => controller.stream);
-//     controller.add([]);
-    
-//     addTearDown(controller.close);
+//       () => mockChatRepository.watchMessages(testRoomID),
+//     ).thenAnswer((_) => Stream<List<Message>>.value([message]));
 
 //     await tester.pumpWidget(
 //       ProviderScope(
@@ -57,15 +53,17 @@
 //     );
 //     await tester.pumpAndSettle();
 
-//     expect(find.text('There is no message here'), findsOneWidget);
+//     // expect(find.text('There is no message here'), findsOneWidget);
 
 //     final messageField = find.byType(CustomTextFormField);
 
 //     await tester.enterText(messageField, 'Hello');
-//     await tester.tap(find.byType(FloatingActionButton));
-//     controller.add([message]);
-//     await tester.pumpAndSettle();
-
 //     expect(find.text('Hello'), findsOneWidget);
+//     expect(find.text('error'), findsOneWidget);
+//     // expect(find.text('There is no message here'), findsOneWidget);
+//     // await tester.tap(find.byType(FloatingActionButton));
+//     // await tester.pumpAndSettle();
+
+//     // verify(() => mockChatRepository.sendMessage(message)).called(1);
 //   });
 // }
