@@ -4,7 +4,7 @@
 
 A real-time chat application built using Flutter, Firebase, and Riverpod. The app provides seamless communication with an intuitive interface and reliable performance.
 
-https://github.com/Ehsan2009/chat-app/blob/master/first screen shot.PNG
+https://github.com/Ehsan2009/chat-app/blob/master/first_screenshot.PNG
 https://github.com/Ehsan2009/chat-app/blob/master/second screen shot.PNG
 https://github.com/Ehsan2009/chat-app/blob/master/third screen shot.PNG
 
