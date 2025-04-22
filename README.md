@@ -1,4 +1,7 @@
 # 💬 Flutter Chat App  
+
+**🌐 Live Web Preview:** [chat-app-88c4a.web.app](https://chat-app-88c4a.web.app/)
+
 A real-time chat application built using Flutter, Firebase, and Riverpod. The app provides seamless communication with an intuitive interface and reliable performance.
 
 ---
@@ -26,3 +29,9 @@ A real-time chat application built using Flutter, Firebase, and Riverpod. The ap
 1. Clone the repo  
    ```bash
    git clone https://github.com/Ehsan2009/chat-app.git
+2. Get the dependencies
+   ```bash
+   flutter pub get
+3. Run the app
+   ```bash
+   flutter run
